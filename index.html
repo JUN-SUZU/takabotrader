@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TakasumiTrader</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+
+<body>
+    <main>
+        <div class="title">
+            <h1>TakasumiTrader</h1>
+        </div>
+        <button onclick="start()" id="start">run</button>
+        <canvas id="chart"></canvas>
+        <div class="info">
+            <h2 id="price"></h2>
+            <div id="fluct">
+                <p id="fluctRate"></p>
+                <p id="fluctPrice"></p>
+            </div>
+            <button onclick="work()" class="work">WORK</button>
+        </div>
+        <div id="tooltip"></div>
+    </main>
+    <script src="./index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  min-height: 100vh; /*画面の高さの最小値を指定*/
+  display: flex;
+  flex-direction: column;
+}
+body main {
+  flex-grow: 1; /*要素が少ないときに縦に伸びる*/
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+}
+body main #chart {
+  width: 90vw;
+  height: 80vh;
+  margin: 0 auto;
+}
+body main .info {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  padding: 0 2rem;
+}
+body main .info #price {
+  width: 180px;
+  height: 60px;
+  border-radius: 15px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: white;
+}
+body main .info #fluct {
+  width: 180px;
+  height: 60px;
+  border-radius: 15px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: white;
+}
+body main .info .work {
+  width: 180px;
+  height: 60px;
+  border-radius: 15px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #29c6ff;
+}
+body main .info .work:hover {
+  cursor: pointer;
+  background-color: #50d3ff;
+}

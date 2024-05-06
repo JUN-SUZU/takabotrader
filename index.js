@@ -1,7 +1,7 @@
 function start() {
     document.getElementById('start').style.display = 'none';
     updatePrice();
-    setInterval(updatePrice, 300000);
+    setInterval(updatePrice, 60000);
 }
 
 function work() {
@@ -9,34 +9,15 @@ function work() {
     setTimeout(playDon, 1200000);
 }
 
-let lastTime = null;
+async function playBuy() { for (let i = 0; i < 5; i++) { setTimeout(() => { let buyNotice = new Audio('buy.mp3'); buyNotice.play(); }, 100); } }
+async function playSell() { for (let i = 0; i < 5; i++) { setTimeout(() => { let sellNotice = new Audio('sell.mp3'); sellNotice.play(); }, 100); } }
+async function playDon() { for (let i = 0; i < 5; i++) { setTimeout(() => { let don = new Audio('don.mp3'); don.play(); }, 100); } }
 
-async function playBuy() {
-    for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-            let buyNotice = new Audio('buy.mp3');
-            buyNotice.play();
-        }, 100);
-    }
-}
-async function playSell() {
-    for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-            let sellNotice = new Audio('sell.mp3');
-            sellNotice.play();
-        }, 100);
-    }
-}
-async function playDon() {
-    for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-            let don = new Audio('don.mp3');
-            don.play();
-        }, 100);
-    }
-}
-
+let first = true;
 function updatePrice() {
+    // 15分ごとに更新
+    if (new Date().getMinutes() % 15 !== 0 && !first) return;
+    first = false;
     // https://api.takasumibot.com/v1/trade
     let url = 'https://api.takasumibot.com/v1/trade';
     // データを取得する
@@ -51,24 +32,19 @@ function updatePrice() {
             document.getElementById('price').innerText = price + 'コイン';
             let fluctPrice = price - priceLog[priceLog.length - 2].price;
             let fluctRate = fluctPrice / priceLog[priceLog.length - 2].price * 100;
-            document.getElementById('fluctPrice').innerText = fluctPrice.toFixed(2) + 'コイン';
+            document.getElementById('fluctPrice').innerText = fluctPrice + 'コイン';
             document.getElementById('fluctRate').innerText = fluctRate.toFixed(2) + '%';
+
             let fluctBox = document.getElementById('fluct');
-            if (priceLog[priceLog.length - 1].time !== lastTime && lastTime == null) {
-                lastTime = priceLog[priceLog.length - 1].time;
-                if (fluctPrice > 0) {
-                    fluctBox.style.backgroundColor = 'green';
-                    if (fluctPrice > 40) {
-                        playSell();
-                    }
-                }
-                else {
-                    fluctBox.style.backgroundColor = 'red';
-                    if (fluctPrice < -40) {
-                        playBuy();
-                    }
-                }
+            if (fluctPrice > 0) {
+                fluctBox.style.backgroundColor = 'green';
+                if (fluctPrice > 40) playSell();
             }
+            else if (fluctPrice < 0) {
+                fluctBox.style.backgroundColor = 'red';
+                if (fluctPrice < -40) playBuy();
+            }
+            else fluctBox.style.backgroundColor = 'white';
         })
         .catch(error => {
             console.error('Error:', error);

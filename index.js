@@ -9,9 +9,9 @@ function work() {
     setTimeout(playDon, 1200000);
 }
 
-async function playBuy() { for (let i = 0; i < 5; i++) { setTimeout(() => { let buyNotice = new Audio('buy.mp3'); buyNotice.play(); }, 100); } }
-async function playSell() { for (let i = 0; i < 5; i++) { setTimeout(() => { let sellNotice = new Audio('sell.mp3'); sellNotice.play(); }, 100); } }
-async function playDon() { for (let i = 0; i < 5; i++) { setTimeout(() => { let don = new Audio('don.mp3'); don.play(); }, 100); } }
+async function playBuy() { for (let i = 0; i < 5; i++) { setTimeout(() => { new Audio('buy.mp3').play(); }, 100); } }
+async function playSell() { for (let i = 0; i < 5; i++) { setTimeout(() => { new Audio('sell.mp3').play(); }, 100); } }
+async function playDon() { for (let i = 0; i < 5; i++) { setTimeout(() => { new Audio('don.mp3').play(); }, 100); } }
 
 let first = true;
 function updatePrice() {
@@ -26,23 +26,25 @@ function updatePrice() {
         .then(response => response.json())
         .then(data => {
             priceLog = data.data;
+            // 288個のデータから最新の96個を取得
+            priceLog = priceLog.slice(priceLog.length - 96);
+            console.log(priceLog);
             // グラフの描画
             drawGraph(priceLog);
             let price = priceLog[priceLog.length - 1].price;
             document.getElementById('price').innerText = price + 'コイン';
+            if (price>1090) playSell();
+            else if (price<1020) playBuy();
             let fluctPrice = price - priceLog[priceLog.length - 2].price;
             let fluctRate = fluctPrice / priceLog[priceLog.length - 2].price * 100;
             document.getElementById('fluctPrice').innerText = fluctPrice + 'コイン';
             document.getElementById('fluctRate').innerText = fluctRate.toFixed(2) + '%';
-
             let fluctBox = document.getElementById('fluct');
             if (fluctPrice > 0) {
                 fluctBox.style.backgroundColor = 'green';
-                if (fluctPrice > 40) playSell();
             }
             else if (fluctPrice < 0) {
                 fluctBox.style.backgroundColor = 'red';
-                if (fluctPrice < -40) playBuy();
             }
             else fluctBox.style.backgroundColor = 'white';
         })
